@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 typedef FirstRenderedStartListener = void Function();
@@ -95,9 +94,6 @@ class FAliListPlayerController {
 
   ///播放列表的URL组
   List<String> urls;
-
-  ///播放列表的大小
-  Map<String, Size> videoSizes;
 
   ///自动播放
   bool isAutoPlay;
@@ -211,7 +207,11 @@ class FAliListPlayerController {
   ///获取缓存文件的路径
   ///[url]文件的url
   Future<void> getCachePath(String url) {
-    return _channel?.invokeMethod("getCachesPath");
+    return _channel?.invokeMethod("getCachesPath",{"url":url});
+  }
+
+  Future<void> seekTo(int position) {
+    return _channel?.invokeMethod("seekTo", {"position": position});
   }
 
   void _onEvent(event) {

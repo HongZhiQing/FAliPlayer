@@ -5,6 +5,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+        mavenCentral()
+        maven {
+            url 'https://maven.aliyun.com/repository/releases'
+        }
     }
 
     dependencies {
@@ -16,6 +21,11 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+
+        mavenCentral()
+        maven {
+            url 'https://maven.aliyun.com/repository/releases'
+        }
     }
 }
 
@@ -31,4 +41,8 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+}
+dependencies {
+    implementation 'com.aliyun.sdk.android:AliyunPlayer:4.5.0-full'
+    implementation 'com.alivc.conan:AlivcConan:0.9.5'
 }

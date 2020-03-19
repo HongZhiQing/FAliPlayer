@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+
+import 'package:faliplayer/controller.dart';
 import 'package:faliplayer/faliplayer.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:faliplayer/singleplayer/singlecontroller.dart';
+import 'package:faliplayer/singleplayer/alisingleplayer.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -10,6 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FAliListPlayerController controller;
+  bool a = true;
   List<String> urls = [
     "http://video.iqingbai.com/202002181038474liyNnnSzz.mp4",
     "http://video.iqingbai.com/20200218025702PSiVKDB5ap.mp4",
@@ -32,27 +38,8 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     controller = FAliListPlayerController(isAutoPlay: true, loop: true);
     controller.addUrls(urls);
-    getTemporaryDirectory().then((d) {
-      AVPCacheConfig config = new AVPCacheConfig();
-      controller.setCacheConfig(
-          AVPCacheConfig(path: d.path, maxDuration: 100, maxSizeMB: 1024));
-    });
-    //播放位置更新监听
-    controller.setPositionUpdateListener((position) {
-
-    });
-    //缓存位置更新监听
-    controller.setBufferedPositionUpdateListener((position) {
-
-    });
-    //视频大小变化监听
-    controller.setOnVideoSizeChanged((){
-
-    });
-    //视频播放事件变化监听
-    controller.setOnPlayEventListener((type){
-
-    });
+    controller.setCacheConfig(
+        AVPCacheConfig(path: "hjhh", maxDuration: 100, maxSizeMB: 1024));
   }
 
   @override
@@ -64,32 +51,12 @@ class _MyAppState extends State<MyApp> {
         ),
         body: FAliPlayerView.builder(
           controller: controller,
-          pageBuilder: (c, i) {
-            return GestureDetector(
-                onTap: () {
-                  controller.pause();
-                },
-                onDoubleTap: () {
-                  controller.start();
-                },
-                child:Container());
-          },
-          thumbImageBuilder: (c, i, h, w) {
-            controller.start();
-            controller.pause();
-            controller.moveTo(0);
-            controller.moveToNext();
-            controller.moveToPre();
-            return Container(
-                color: Colors.black,
-                constraints: BoxConstraints.expand(),
-                child: Image.network(
-                  "${urls[i]}?vframe/jpg/offset/1",
-                  fit: BoxFit.cover,
-                ));
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print('111111');
           },
         ),
-
       ),
     );
   }
