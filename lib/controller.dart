@@ -39,6 +39,31 @@ enum AVPEventType {
   ///循环播放开始事件*/
   AVPEventLoopingStart,
 }
+enum AVPStatus {
+  ///空转，闲时，静态
+  AVPStatusIdle,
+
+  /// 初始化完成
+  AVPStatusInitialzed,
+
+  /// 准备完成
+  AVPStatusPrepared,
+
+  /// 正在播放
+  AVPStatusStarted,
+
+  /// 播放暂停
+  AVPStatusPaused,
+
+  /// 播放停止
+  AVPStatusStopped,
+
+  /// 播放完成
+  AVPStatusCompletion,
+
+  /// 播放错误
+  AVPStatusError
+}
 enum AVPScalingMode {
   SCALETOFILL,
   SCALEASPECTFIT,
@@ -90,6 +115,8 @@ class FAliListPlayerController {
   ///当前视频的宽
   int width;
 
+  int currentStatus;
+
   ///第一帧渲染成功的监听器，每次切换新的视频都会调用
   FirstRenderedStartListener _firstRenderedStartListener;
 
@@ -103,6 +130,9 @@ class FAliListPlayerController {
       {this.isAutoPlay = false, this.cacheConfig, this.loop = false}) {
     urls = List();
   }
+
+  /// 当前是否正在播放
+  bool get isPlaying => currentStatus == AVPStatus.AVPStatusStarted.index;
 
   void setBufferedPositionUpdateListener(
       OnBufferedPositionUpdateListener value) {
@@ -181,7 +211,8 @@ class FAliListPlayerController {
         }
         break;
       case "onPlayerStatusChanged":
-        if (event["values"] == 3) {
+        currentStatus = event["values"];
+        if (event["values"] == AVPStatus.AVPStatusStarted.index) {
           firstRenderedStart = true;
           if (width < height) {
             this.setScalingMode(AVPScalingMode.SCALEASPECTFILL);
