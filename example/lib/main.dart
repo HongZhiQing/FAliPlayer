@@ -3,6 +3,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:faliplayer/faliplayer.dart';
+import 'package:faliplayer/controller.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  FAliListPlayerController controller;
   List<String> urls = [
     "http://video.iqingbai.com/202002181038474liyNnnSzz.mp4",
     "http://video.iqingbai.com/20200218025702PSiVKDB5ap.mp4",
@@ -33,8 +35,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    controller = FAliListPlayerController(isAutoPlay: true);
+    controller.addUrls(urls);
+    getTemporaryDirectory().then((d) {
+      controller.setCacheConfig(
+          AVPCacheConfig(path: d.path, maxDuration: 100, maxSizeMB: 1024));
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,12 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: AliPlayerView(
-          urls: urls,
+          controller: controller,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            controller.getCachePath(urls[0]);
+          },
         ),
       ),
     );
