@@ -70,6 +70,8 @@ controller.moveTo(0);
 controller.moveToNext();
 //上一个
 controller.moveToPre();
+//跳转
+controller.seekTo(positon);
 ```
 ### 监听
 
@@ -109,6 +111,10 @@ controller.setCacheConfig(
 Future<void> getCachePath(String url)
 ```
 ### 设置视频显示模式
+```
+Future<void> setScalingMode(AVPScalingMode mode)
+```
+
 属性 | 说明
 ------- | -------
 SCALETOFILL            |      拉伸（会变形）
