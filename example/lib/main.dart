@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:faliplayer/controller.dart';
 import 'package:faliplayer/faliplayer.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:faliplayer/singleplayer/singlecontroller.dart';
-import 'package:faliplayer/singleplayer/alisingleplayer.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -49,7 +44,7 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: FAliPlayerView.builder(
+        body: FAliListPlayerView.builder(
           controller: controller,
         ),
         floatingActionButton: FloatingActionButton(
