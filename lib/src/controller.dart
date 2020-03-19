@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-typedef FirstRenderedStartListener = Function();
+typedef FirstRenderedStartListener = void Function();
 
 ///当前播放进度更新
-typedef OnPositionUpdateListener = Function(int position);
+typedef OnPositionUpdateListener = void Function(int position);
 
 ///当前缓存进度更新
-typedef OnBufferedPositionUpdateListener = Function(int position);
+typedef OnBufferedPositionUpdateListener = void Function(int position);
+
+///当前缓存进度更新
+typedef OnPlayEventListener = void Function(AVPEventType eventType);
 
 ///大小改变回调
 typedef OnVideoSizeChanged = void Function();
@@ -126,6 +129,8 @@ class FAliListPlayerController {
 
   OnVideoSizeChanged _onVideoSizeChanged;
 
+  OnPlayEventListener _onPlayEventListener;
+
   FAliListPlayerController(
       {this.isAutoPlay = false, this.cacheConfig, this.loop = false}) {
     urls = List();
@@ -152,6 +157,11 @@ class FAliListPlayerController {
   /// 设置视频宽高变化监听
   setOnVideoSizeChanged(OnVideoSizeChanged listener) {
     this._onVideoSizeChanged = listener;
+  }
+
+  ///播放器事件监听
+  setOnPlayEventListener(OnPlayEventListener listener) {
+    this._onPlayEventListener = listener;
   }
 
   /// 设置缓存配置,请在初始化时设置
@@ -208,8 +218,8 @@ class FAliListPlayerController {
     String type = event['eventType'];
     switch (type) {
       case "onPlayerEvent":
-        if (event["values"] == AVPEventType.AVPEventFirstRenderedStart.index) {
-//          firstRenderedStart = true;
+        if (_onPlayEventListener != null) {
+          _onPlayEventListener(event["values"]);
         }
         break;
       case "onPlayerStatusChanged":

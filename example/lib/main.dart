@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:faliplayer/faliplayer.dart';
-import 'package:faliplayer/controller.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:faliplayer/faliplayer.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -38,14 +33,25 @@ class _MyAppState extends State<MyApp> {
     controller = FAliListPlayerController(isAutoPlay: true, loop: true);
     controller.addUrls(urls);
     getTemporaryDirectory().then((d) {
+      AVPCacheConfig config = new AVPCacheConfig();
       controller.setCacheConfig(
           AVPCacheConfig(path: d.path, maxDuration: 100, maxSizeMB: 1024));
     });
-    controller.setPositionUpdateListener((d) {
-//      print('当前播放位置:$d');
+    //播放位置更新监听
+    controller.setPositionUpdateListener((position) {
+
     });
-    controller.setBufferedPositionUpdateListener((d) {
-//      print('当前缓存位置:$d');
+    //缓存位置更新监听
+    controller.setBufferedPositionUpdateListener((position) {
+
+    });
+    //视频大小变化监听
+    controller.setOnVideoSizeChanged((){
+
+    });
+    //视频播放事件变化监听
+    controller.setOnPlayEventListener((type){
+
     });
   }
 
@@ -69,6 +75,11 @@ class _MyAppState extends State<MyApp> {
                 child:Container());
           },
           thumbImageBuilder: (c, i, h, w) {
+            controller.start();
+            controller.pause();
+            controller.moveTo(0);
+            controller.moveToNext();
+            controller.moveToPre();
             return Container(
                 color: Colors.black,
                 constraints: BoxConstraints.expand(),
