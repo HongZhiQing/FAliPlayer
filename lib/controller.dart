@@ -139,6 +139,7 @@ class FAliListPlayerController {
     _bufferedPositionUpdateListener = value;
   }
 
+  /// 设置当前播放位置监听
   void setPositionUpdateListener(OnPositionUpdateListener value) {
     _positionUpdateListener = value;
   }
@@ -148,6 +149,7 @@ class FAliListPlayerController {
     this._firstRenderedStartListener = listener;
   }
 
+  /// 设置视频宽高变化监听
   setOnVideoSizeChanged(OnVideoSizeChanged listener) {
     this._onVideoSizeChanged = listener;
   }
@@ -243,7 +245,7 @@ class FAliListPlayerController {
   }
 
   void dispose() {
-    _streamSubscription.cancel();
+    _streamSubscription?.cancel();
   }
 
   void onViewCreate(int i) {

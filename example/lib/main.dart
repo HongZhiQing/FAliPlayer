@@ -66,11 +66,7 @@ class _MyAppState extends State<MyApp> {
                 onDoubleTap: () {
                   controller.start();
                 },
-                child: Icon(
-                  Icons.play_circle_filled,
-                  size: 58,
-                  color: Colors.white,
-                ));
+                child:Container());
           },
           thumbImageBuilder: (c, i, h, w) {
             return Container(
@@ -82,11 +78,7 @@ class _MyAppState extends State<MyApp> {
                 ));
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            controller.setScalingMode(AVPScalingMode.SCALEASPECTFIT);
-          },
-        ),
+
       ),
     );
   }
