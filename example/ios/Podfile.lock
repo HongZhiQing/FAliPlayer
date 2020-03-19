@@ -1,0 +1,31 @@
+PODS:
+  - AliPlayerSDK_iOS (5.1.0):
+    - AliPlayerSDK_iOS/AliPlayerSDK (= 5.1.0)
+  - AliPlayerSDK_iOS/AliPlayerSDK (5.1.0)
+  - faliplayer (0.0.1):
+    - AliPlayerSDK_iOS
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - faliplayer (from `.symlinks/plugins/faliplayer/ios`)
+  - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - AliPlayerSDK_iOS
+
+EXTERNAL SOURCES:
+  faliplayer:
+    :path: ".symlinks/plugins/faliplayer/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  AliPlayerSDK_iOS: 7377cfbe36b97629e4f4a19884ed9c28636d08fd
+  faliplayer: aac943156488038d574491a66e8b53d1370ff4d1
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
+
+COCOAPODS: 1.8.4
