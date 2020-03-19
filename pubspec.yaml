@@ -1,8 +1,8 @@
 name: faliplayer
-description: A new Flutter plugin.
-version: 0.0.1
-author:
-homepage:
+description: flutter version aliplayer
+version: 1.0.0
+author: hzqbetterman@gmail.com
+homepage: https://github.com/Dovvvis/FAliPlayer
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
