@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 typedef FirstRenderedStartListener = Function();
@@ -9,6 +10,9 @@ typedef OnPositionUpdateListener = Function(int position);
 
 ///当前缓存进度更新
 typedef OnBufferedPositionUpdateListener = Function(int position);
+
+///大小改变回调
+typedef OnVideoSizeChanged = void Function();
 
 enum AVPEventType {
   ///准备完成事件*/
@@ -35,6 +39,11 @@ enum AVPEventType {
   ///循环播放开始事件*/
   AVPEventLoopingStart,
 }
+enum AVPScalingMode {
+  SCALETOFILL,
+  SCALEASPECTFIT,
+  SCALEASPECTFILL,
+}
 
 class AVPCacheConfig {
   ///缓存目录
@@ -59,8 +68,14 @@ class FAliListPlayerController {
   ///播放列表的URL组
   List<String> urls;
 
+  ///播放列表的大小
+  Map<String, Size> videoSizes;
+
   ///自动播放
   bool isAutoPlay;
+
+  ///循环播放
+  bool loop;
 
   ///标记第一帧渲染成功,每次都切换新的视频都会标记为true
   ///用到的地方需要手动标记为false，否则会一直为true
@@ -69,6 +84,12 @@ class FAliListPlayerController {
   ///缓存配置
   AVPCacheConfig cacheConfig;
 
+  ///当前视频的高
+  int height;
+
+  ///当前视频的宽
+  int width;
+
   ///第一帧渲染成功的监听器，每次切换新的视频都会调用
   FirstRenderedStartListener _firstRenderedStartListener;
 
@@ -76,45 +97,39 @@ class FAliListPlayerController {
 
   OnPositionUpdateListener _positionUpdateListener;
 
-  set setBufferedPositionUpdateListener(
+  OnVideoSizeChanged _onVideoSizeChanged;
+
+  FAliListPlayerController(
+      {this.isAutoPlay = false, this.cacheConfig, this.loop = false}) {
+    urls = List();
+  }
+
+  void setBufferedPositionUpdateListener(
       OnBufferedPositionUpdateListener value) {
     _bufferedPositionUpdateListener = value;
   }
 
-  set setPositionUpdateListener(OnPositionUpdateListener value) {
+  void setPositionUpdateListener(OnPositionUpdateListener value) {
     _positionUpdateListener = value;
   }
 
-  FAliListPlayerController({this.isAutoPlay = false, this.cacheConfig}) {
-    urls = List();
+  /// 设置首帧渲染完成的监听器
+  setFirstRenderedStartListener(FirstRenderedStartListener listener) {
+    this._firstRenderedStartListener = listener;
   }
 
+  setOnVideoSizeChanged(OnVideoSizeChanged listener) {
+    this._onVideoSizeChanged = listener;
+  }
+
+  /// 设置缓存配置,请在初始化时设置
   void setCacheConfig(AVPCacheConfig config) {
     this.cacheConfig = config;
   }
 
+  /// 往视频播放列表添加预加载urls
   void addUrls(List<String> urls) {
     this.urls.addAll(urls);
-  }
-
-  onViewCreate(int i) {
-    if (_channel == null && _streamSubscription == null) {
-      _channel = MethodChannel("plugin.iqingbai.com/ali_video_play_$i");
-
-      _streamSubscription =
-          EventChannel("plugin.iqingbai.com/eventChannel/ali_video_play_$i")
-              .receiveBroadcastStream()
-              .listen(_onEvent);
-
-      _channel.invokeMethod("addUrlSource", <String, dynamic>{"urls": urls});
-      if (isAutoPlay || urls.length > 0) {
-        this.moveTo(0);
-      }
-    }
-  }
-
-  setFirstRenderedStartListener(FirstRenderedStartListener listener) {
-    this._firstRenderedStartListener = listener;
   }
 
   ///开始播放
@@ -137,6 +152,12 @@ class FAliListPlayerController {
     return _channel?.invokeMethod("moveToPre");
   }
 
+  Future<void> setScalingMode(AVPScalingMode mode) {
+    return _channel?.invokeMethod("setScalingMode", {
+      "mode": mode.index,
+    });
+  }
+
   ///移动到目标视频，并播放
   ///[index]是视频的标识坐标
   Future<void> moveTo(int index) {
@@ -155,15 +176,18 @@ class FAliListPlayerController {
     String type = event['eventType'];
     switch (type) {
       case "onPlayerEvent":
-        print('event:${event["values"]}');
         if (event["values"] == AVPEventType.AVPEventFirstRenderedStart.index) {
 //          firstRenderedStart = true;
         }
         break;
       case "onPlayerStatusChanged":
-        print('onPlayerStatusChanged:${event["values"]}');
         if (event["values"] == 3) {
           firstRenderedStart = true;
+          if (width < height) {
+            this.setScalingMode(AVPScalingMode.SCALEASPECTFILL);
+          } else {
+            this.setScalingMode(AVPScalingMode.SCALEASPECTFIT);
+          }
           this._firstRenderedStartListener();
         }
         break;
@@ -177,10 +201,33 @@ class FAliListPlayerController {
           this._bufferedPositionUpdateListener(event["values"]);
         }
         break;
+      case "onVideoSizeChanged":
+        this.height = event["height"];
+        this.width = event["width"];
+        if (this._onVideoSizeChanged != null) {
+          this._onVideoSizeChanged();
+        }
+        break;
     }
   }
 
   void dispose() {
     _streamSubscription.cancel();
+  }
+
+  void onViewCreate(int i) {
+    if (_channel == null && _streamSubscription == null) {
+      _channel = MethodChannel("plugin.iqingbai.com/ali_video_play_$i");
+
+      _streamSubscription =
+          EventChannel("plugin.iqingbai.com/eventChannel/ali_video_play_$i")
+              .receiveBroadcastStream()
+              .listen(_onEvent);
+
+      _channel.invokeMethod("addUrlSource", <String, dynamic>{"urls": urls});
+      if (isAutoPlay || urls.length > 0) {
+        this.moveTo(0);
+      }
+    }
   }
 }

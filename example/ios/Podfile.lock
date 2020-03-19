@@ -6,10 +6,16 @@ PODS:
     - AliPlayerSDK_iOS
     - Flutter
   - Flutter (1.0.0)
+  - path_provider (0.0.1):
+    - Flutter
+  - path_provider_macos (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - faliplayer (from `.symlinks/plugins/faliplayer/ios`)
   - Flutter (from `Flutter`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
 
 SPEC REPOS:
   trunk:
@@ -20,11 +26,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/faliplayer/ios"
   Flutter:
     :path: Flutter
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_macos:
+    :path: ".symlinks/plugins/path_provider_macos/ios"
 
 SPEC CHECKSUMS:
   AliPlayerSDK_iOS: 7377cfbe36b97629e4f4a19884ed9c28636d08fd
   faliplayer: aac943156488038d574491a66e8b53d1370ff4d1
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 

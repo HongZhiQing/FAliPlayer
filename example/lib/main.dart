@@ -35,11 +35,17 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    controller = FAliListPlayerController(isAutoPlay: true);
+    controller = FAliListPlayerController(isAutoPlay: true, loop: true);
     controller.addUrls(urls);
     getTemporaryDirectory().then((d) {
       controller.setCacheConfig(
           AVPCacheConfig(path: d.path, maxDuration: 100, maxSizeMB: 1024));
+    });
+    controller.setPositionUpdateListener((d) {
+//      print('当前播放位置:$d');
+    });
+    controller.setBufferedPositionUpdateListener((d) {
+//      print('当前缓存位置:$d');
     });
   }
 
@@ -50,12 +56,35 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: AliPlayerView(
+        body: FAliPlayerView.builder(
           controller: controller,
+          pageBuilder: (c, i) {
+            return GestureDetector(
+                onTap: () {
+                  controller.pause();
+                },
+                onDoubleTap: () {
+                  controller.start();
+                },
+                child: Icon(
+                  Icons.play_circle_filled,
+                  size: 58,
+                  color: Colors.white,
+                ));
+          },
+          thumbImageBuilder: (c, i, h, w) {
+            return Container(
+                color: Colors.black,
+                constraints: BoxConstraints.expand(),
+                child: Image.network(
+                  "${urls[i]}?vframe/jpg/offset/1",
+                  fit: BoxFit.cover,
+                ));
+          },
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            controller.getCachePath(urls[0]);
+            controller.setScalingMode(AVPScalingMode.SCALEASPECTFIT);
           },
         ),
       ),
