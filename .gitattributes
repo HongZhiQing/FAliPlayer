@@ -1,1 +1,1 @@
-*.java linguist-language=dart
+*.java linguist-detectable=false
