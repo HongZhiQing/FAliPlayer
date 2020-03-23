@@ -47,7 +47,7 @@ class _FAliPlayerViewState extends State<FAliPlayerView> {
             "cacheConfig": widget.controller.cacheConfig?.toJson(),
             "url": widget.url ?? " ",
             "loop": widget.controller.loop,
-            "auto":widget.controller.isAutoPlay
+            "auto": widget.controller.isAutoPlay
           },
         )
             : UiKitView(

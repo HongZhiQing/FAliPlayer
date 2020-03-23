@@ -54,7 +54,8 @@ public class FAliPlayerSingleTextureView implements PlatformView, MethodChannel.
         urlSource.setUri((String) args.get("url"));
         aliPlayer.setDataSource(urlSource);
         aliPlayer.setScaleMode(IPlayer.ScaleMode.SCALE_TO_FILL);
-
+        aliPlayer.setMute(false);
+        aliPlayer.setLoop((Boolean) args.get("loop"));
 
         HashMap map = (HashMap) args.get("cacheConfig");
         cacheConfig = new CacheConfig();
@@ -63,7 +64,7 @@ public class FAliPlayerSingleTextureView implements PlatformView, MethodChannel.
         //能够缓存的单个文件最a大时长。超过此长度则不缓存
         assert map != null;
         int maxDuration = (int) map.get("maxDuration");
-        System.out.println("maxDuration:"+maxDuration);
+        System.out.println("maxDuration:" + maxDuration);
         BigDecimal b = new BigDecimal(maxDuration);
         cacheConfig.mMaxDurationS = b.longValue();
         cacheConfig.mMaxSizeMB = (int) map.get("maxSizeMB");
@@ -137,10 +138,6 @@ public class FAliPlayerSingleTextureView implements PlatformView, MethodChannel.
                 break;
             case "stop":
                 aliPlayer.stop();
-                result.success(null);
-                break;
-            case "setMute":
-                aliPlayer.setMute((Boolean) call.argument("mute"));
                 result.success(null);
                 break;
 

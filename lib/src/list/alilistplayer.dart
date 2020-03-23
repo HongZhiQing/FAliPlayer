@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:faliplayer/faliplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,7 +67,6 @@ class _FAliListPlayerViewState extends State<FAliListPlayerView> {
         widget.controller.firstRenderedStart = false;
       }
     });
-
     _pageController.addListener(() {
       if (isIntegerForDouble(_pageController.page)) {
         double page = _pageController.page;
@@ -141,6 +142,19 @@ class VideoView extends StatefulWidget {
 class _VideoViewState extends State<VideoView> {
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid) {
+      return AndroidView(
+        viewType: "plugin.iqingbai.com/ali_video_play",
+        creationParamsCodec: const StandardMessageCodec(),
+        onPlatformViewCreated: widget.controller.onViewCreate,
+        creationParams: <String, dynamic>{
+          "cacheConfig": widget.controller.cacheConfig?.toJson(),
+          "loop": widget.controller.loop,
+          "auto": widget.controller.isAutoPlay,
+        },
+      );
+    }
+
     return UiKitView(
       viewType: "plugin.iqingbai.com/ali_video_play",
       creationParams: {
