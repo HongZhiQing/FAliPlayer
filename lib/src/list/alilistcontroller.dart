@@ -16,6 +16,9 @@ typedef OnPlayEventListener = void Function(AVPEventType eventType);
 ///大小改变回调
 typedef OnVideoSizeChanged = void Function();
 
+///监听播放器状态
+typedef OnStateChange = void Function(int state);
+
 enum AVPEventType {
   ///准备完成事件*/
   AVPEventPrepareDone,
@@ -127,8 +130,10 @@ class FAliListPlayerController {
 
   OnPlayEventListener _onPlayEventListener;
 
+  OnStateChange _onStateChange;
+
   FAliListPlayerController(
-      {this.isAutoPlay = false, this.cacheConfig, this.loop = false}) {
+      {this.isAutoPlay = true, this.cacheConfig, this.loop = false}) {
     urls = List();
   }
 
@@ -158,6 +163,11 @@ class FAliListPlayerController {
   ///播放器事件监听
   setOnPlayEventListener(OnPlayEventListener listener) {
     this._onPlayEventListener = listener;
+  }
+
+  ///播放器状态监听
+  setOnStateChange(OnStateChange listener) {
+    this._onStateChange = listener;
   }
 
   /// 设置缓存配置,请在初始化时设置
@@ -207,7 +217,7 @@ class FAliListPlayerController {
   ///获取缓存文件的路径
   ///[url]文件的url
   Future<void> getCachePath(String url) {
-    return _channel?.invokeMethod("getCachesPath",{"url":url});
+    return _channel?.invokeMethod("getCachesPath", {"url": url});
   }
 
   Future<void> seekTo(int position) {
@@ -232,6 +242,9 @@ class FAliListPlayerController {
             this.setScalingMode(AVPScalingMode.SCALEASPECTFIT);
           }
           this._firstRenderedStartListener();
+        }
+        if (_onStateChange != null) {
+          this._onStateChange(event["values"]);
         }
         break;
       case "onCurrentPositionUpdate":

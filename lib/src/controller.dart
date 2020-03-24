@@ -4,8 +4,6 @@ import 'package:faliplayer/faliplayer.dart';
 import 'package:flutter/services.dart';
 
 
-
-
 class FAliPlayerController {
   MethodChannel _channel;
   StreamSubscription _streamSubscription;
@@ -39,17 +37,18 @@ class FAliPlayerController {
     _positionUpdateListener = value;
   }
 
-  FAliPlayerController({this.isAutoPlay = false,this.cacheConfig, this.loop = false});
+  FAliPlayerController(
+      {this.isAutoPlay = false, this.cacheConfig, this.loop = false});
 
 
   onViewCreate(int i) {
-      _channel = MethodChannel("plugin.iqingbai.com/ali_video_play_single_$i");
-      _streamSubscription = EventChannel(
-              "plugin.iqingbai.com/eventChannel/ali_video_play_single_$i")
-          .receiveBroadcastStream()
-          .listen(_onEvent);
-      if (isAutoPlay) {
-        this.start();
+    _channel = MethodChannel("plugin.iqingbai.com/ali_video_play_single_$i");
+    _streamSubscription = EventChannel(
+        "plugin.iqingbai.com/eventChannel/ali_video_play_single_$i")
+        .receiveBroadcastStream()
+        .listen(_onEvent);
+    if (isAutoPlay) {
+      this.start();
     }
   }
 

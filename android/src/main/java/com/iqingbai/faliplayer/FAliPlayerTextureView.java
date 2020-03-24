@@ -39,6 +39,7 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     FAliPlayerTextureView(Context context, BinaryMessenger messenger, HashMap args, int viewId) {
+        System.out.println("args:"+args.get("loop"));
         createView(context, args);
         initChannel(messenger, viewId);
         this.viewId = viewId;
@@ -55,8 +56,10 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
         aliListPlayer.setPreloadCount(5);
         aliListPlayer.setAutoPlay(true);
         aliListPlayer.setScaleMode(IPlayer.ScaleMode.SCALE_TO_FILL);
-        boolean loop = (Boolean) args.get("loop");
+        boolean loop = (boolean) args.get("loop");
+        boolean auto = (boolean) args.get("auto");
         aliListPlayer.setLoop(loop);
+        aliListPlayer.setAutoPlay(auto);
 
 
         HashMap map = (HashMap) args.get("cacheConfig");
@@ -65,9 +68,7 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
         cacheConfig.mEnable = true;
         //能够缓存的单个文件最a大时长。超过此长度则不缓存
         assert map != null;
-        int maxDuration = (int) map.get("maxDuration");
-        System.out.println("maxDuration:" + maxDuration);
-        BigDecimal b = new BigDecimal(maxDuration);
+        BigDecimal b = new BigDecimal((int)map.get("maxDuration"));
         cacheConfig.mMaxDurationS = b.longValue();
         cacheConfig.mMaxSizeMB = (int) map.get("maxSizeMB");
         cacheConfig.mDir = (String) map.get("path");
@@ -204,7 +205,6 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
 
     @Override
     public void onStateChanged(int i) {
-        System.out.println("onPlayerStatusChanged：" + i);
         if (eventSink != null) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("eventType", "onPlayerStatusChanged");
@@ -215,8 +215,6 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
 
     @Override
     public void onPrepared() {
-        System.out.println("onPrepared：");
-
         if (eventSink != null) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("eventType", "onPrepared");
@@ -240,7 +238,6 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
 
     @Override
     public void onInfo(InfoBean infoBean) {
-        System.out.println("onInfo：" + infoBean);
         HashMap<String, Object> map = new HashMap<>();
         switch (infoBean.getCode().getValue()) {
             case 1:
@@ -258,7 +255,6 @@ public class FAliPlayerTextureView implements PlatformView, MethodChannel.Method
 
     @Override
     public void onError(ErrorInfo errorInfo) {
-        System.out.println("onError：" + errorInfo.getMsg());
         if (eventSink != null) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("eventType", "onError");
