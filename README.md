@@ -2,10 +2,10 @@
 
 Flutter版的阿里云列表播放器，支持边播边缓存
 
-<!-- [![pub package](https://img.shields.io/pub/v/extended_text.svg)](https://pub.dartlang.org/packages/extended_text)  -->
-<!-- [![GitHub stars](https://img.shields.io/github/stars/fluttercandies/extended_text)](https://github.com/fluttercandies/extended_text/stargazers)  -->
-[![GitHub license](https://img.shields.io/github/license/fluttercandies/extended_text)](https://github.com/fluttercandies/extended_text/blob/master/LICENSE)  
-<!-- ![GitHub issues](https://img.shields.io/github/issues/fluttercandies/extended_text) -->
+[![pub package](https://img.shields.io/pub/v/faliplayer.svg)](https://pub.dev/packages/faliplayer) 
+[![GitHub stars](https://img.shields.io/github/stars/Dovvvis/FAliPlayer)](https://github.com/Dovvvis/FAliPlayer/stargazers) 
+![GitHub issues](https://img.shields.io/github/issues/Dovvvis/FAliPlayer) 
+<!-- [![GitHub license](https://img.shields.io/github/license/Dovvvis/FAliPlayer)](https://github.com/Dovvvis/FAliPlayer/blob/master/LICENSE)  -->
 
 # 示例效果
 ![gif图加载慢请耐心等待](https://github.com/Dovvvis/FAliPlayer/blob/master/gif/s.gif)

@@ -1,7 +1,6 @@
 name: faliplayer
 description: flutter version aliplayer
-version: 1.0.0
-author: hzqbetterman@gmail.com
+version: 0.0.1
 homepage: https://github.com/Dovvvis/FAliPlayer
 
 environment:
